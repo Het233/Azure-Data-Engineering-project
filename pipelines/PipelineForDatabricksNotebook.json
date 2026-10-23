@@ -1,0 +1,177 @@
+{
+    "name": "PipelineForDatabricksNotebook",
+    "properties": {
+        "activities": [
+            {
+                "name": "config_file",
+                "type": "DatabricksNotebook",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Users/hussipros@gmail.com/pipeline_config"
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_AzureDatabricks",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Silver",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "config_file",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Users/hussipros@gmail.com/Silver"
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_AzureDatabricks",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Gold_dimCustomer",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Silver",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Users/hussipros@gmail.com/Gold_dimCustomer"
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_AzureDatabricks",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Gold_dimProduct",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Silver",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Users/hussipros@gmail.com/Gold_dimProduct"
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_AzureDatabricks",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Gold_dimSalesRegion",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Silver",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Users/hussipros@gmail.com/Gold_dimSalesRegion"
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_AzureDatabricks",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Gold_factSales",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Gold_dimCustomer",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "Gold_dimProduct",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "Gold_dimSalesRegion",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Users/hussipros@gmail.com/Gold_factSales"
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_AzureDatabricks",
+                    "type": "LinkedServiceReference"
+                }
+            }
+        ],
+        "annotations": [],
+        "lastPublishTime": "2026-07-11T17:06:50Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}
